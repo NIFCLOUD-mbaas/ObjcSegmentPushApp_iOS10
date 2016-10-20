@@ -104,7 +104,7 @@ const static CGFloat CellMargin = 5.0f;
 }
 
 - (void)layoutSubviews {
-//    self.reuseIdentifier isEqualToString:@""
+    
 }
 
 @end

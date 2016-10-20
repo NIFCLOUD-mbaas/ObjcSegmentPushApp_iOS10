@@ -8,6 +8,9 @@
 
 #import "AppDelegate.h"
 #import <NCMB/NCMB.h>
+#import <UserNotifications/UserNotifications.h>
+
+#import "ViewController.h"
 
 @interface AppDelegate ()
 
@@ -22,19 +25,40 @@
     [NCMB setApplicationKey:@"YOUR_APPLICATION_KEY"
                   clientKey:@"YOUR_CLIENT_KEY"];
     
-    //通知のタイプを設定したsettingを用意
-    UIUserNotificationType type = UIUserNotificationTypeAlert |
-    UIUserNotificationTypeBadge |
-    UIUserNotificationTypeSound;
-    UIUserNotificationSettings *setting;
-    setting = [UIUserNotificationSettings settingsForTypes:type
-                                                categories:nil];
-    
-    //通知のタイプを設定
-    [[UIApplication sharedApplication] registerUserNotificationSettings:setting];
-    
-    //DevoceTokenを要求
-    [[UIApplication sharedApplication] registerForRemoteNotifications];
+    if ([[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){10, 0, 0}]){
+        
+        //iOS10以上での、DeviceToken要求方法
+        UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+        [center requestAuthorizationWithOptions:(UNAuthorizationOptionAlert |
+                                                 UNAuthorizationOptionBadge |
+                                                 UNAuthorizationOptionSound)
+                              completionHandler:^(BOOL granted, NSError * _Nullable error) {
+                                  if (error) {
+                                      return;
+                                  }
+                                  if (granted) {
+                                      //通知を許可にした場合DeviceTokenを要求
+                                      [[UIApplication sharedApplication] registerForRemoteNotifications];
+                                  }
+                              }];
+    } else if ([[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){8, 0, 0}]){
+        
+        //iOS10未満での、DeviceToken要求方法
+        
+        //通知のタイプを設定したsettingを用意
+        UIUserNotificationType type = UIUserNotificationTypeAlert |
+        UIUserNotificationTypeBadge |
+        UIUserNotificationTypeSound;
+        UIUserNotificationSettings *setting;
+        setting = [UIUserNotificationSettings settingsForTypes:type
+                                                    categories:nil];
+        
+        //通知のタイプを設定
+        [[UIApplication sharedApplication] registerUserNotificationSettings:setting];
+        
+        //DeviceTokenを要求
+        [[UIApplication sharedApplication] registerForRemoteNotifications];
+    } 
     
     return YES;
 }
@@ -43,22 +67,23 @@
 {
     NSLog(@"Device Token = %@", deviceToken);
     
-    //端末情報を扱うNCMBInstallationのインスタンスを作成
+    // 端末情報を扱うNCMBInstallationのインスタンスを作成
     NCMBInstallation *installation = [NCMBInstallation currentInstallation];
     
-    //Device Tokenを設定
+    // Device Tokenを設定
     [installation setDeviceTokenFromData:deviceToken];
-    [installation setObject:@[@"aaaa",@"bbbb"] forKey:@"channels"];
     
-    //端末情報をデータストアに登録
+    // 端末情報をデータストアに登録
     [installation saveInBackgroundWithBlock:^(NSError *error) {
+        // 登録後ViewControllerのtableViewを更新する
+        ViewController *viewController = (ViewController *)self.window.rootViewController;
+        [viewController getInstallation];
         if(!error){
-            //端末情報の登録が成功した場合の処理
-            NSLog(@"%@",installation);
+            // 端末情報の登録が成功した場合の処理
             NSLog(@"登録に成功");
         } else {
-            //端末情報の登録が失敗した場合の処理
-            NSLog(@"登録に失敗");
+            // 端末情報の登録が失敗した場合の処理
+            viewController.statusLabel.text = [NSString stringWithFormat:@"登録に失敗しました:%ld",(long)error.code];
         }
     }];
 }

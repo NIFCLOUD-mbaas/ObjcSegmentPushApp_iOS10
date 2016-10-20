@@ -8,8 +8,6 @@
 
 #import "ViewController.h"
 #import "AppSetting.h"
-#import <NCMB/NCMB.h>
-
 #import "CustomCell.h"
 #import "ConvertString.h"
 
@@ -29,10 +27,10 @@
 
 @interface ViewController ()<UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
 
+// title (CurrentInstallation)
 @property (nonatomic) UILabel *titleLabel;
+// installationの内容を表示するリスト
 @property (nonatomic) UITableView *tableView;
-
-@property (nonatomic) NCMBInstallation *installation;
 // currentInstallationに登録されているkeyの配列
 @property (nonatomic) NSArray *instKeys;
 // installationに初期で登録されているキー
@@ -60,6 +58,10 @@
     self.titleLabel.textAlignment = NSTextAlignmentCenter;
     self.titleLabel.font = [UIFont systemFontOfSize:28.0f];
     
+    self.statusLabel = [[UILabel alloc]init];
+    self.statusLabel.textAlignment = NSTextAlignmentCenter;
+    self.statusLabel.font = [UIFont systemFontOfSize:12.0f];
+    
     // tableView
     self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
     self.tableView.delegate = self;
@@ -68,6 +70,8 @@
     self.tableView.allowsSelection = NO; // セルを選択できないようにする
     
     [self.view addSubview:self.titleLabel];
+    [self.titleLabel addSubview:self.statusLabel];
+    
     [self.view addSubview:self.tableView];
     
     // キーボードのイベント設定
@@ -78,9 +82,6 @@
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapScreen:)];
     [self.view addGestureRecognizer:tapGesture];
     
-    // installationを取得
-    [self getInstallation];
-    
 }
 
 /**
@@ -88,21 +89,26 @@
  */
 - (void)getInstallation {
     
-    //端末情報をデータストアから取得
-    [self.installation fetchInBackgroundWithBlock:^(NSError *error) {
-        if(!error){
-            //端末情報の取得が成功した場合の処理
-            NSLog(@"取得に成功");
-            self.instKeys = [self.installation allKeys];
-            // 追加fieldの値を初期化する
-            self.addFieldManager.keyStr = @"";
-            self.addFieldManager.valueStr = @"";
-            [self.tableView reloadData];
-        } else {
-            //端末情報の取得が失敗した場合の処理
-            NSLog(@"登録に失敗");
-        }
-    }];
+    self.installation = [NCMBInstallation currentInstallation];
+    
+    // objectIdが取得できている場合はtableViewの表示を更新する
+    if ([self.installation objectForKey:@"objectId"]) {
+        //端末情報をデータストアから取得
+        [self.installation fetchInBackgroundWithBlock:^(NSError *error) {
+            if(!error){
+                //端末情報の取得が成功した場合の処理
+                NSLog(@"取得に成功");
+                self.instKeys = [self.installation allKeys];
+                // 追加fieldの値を初期化する
+                self.addFieldManager.keyStr = @"";
+                self.addFieldManager.valueStr = @"";
+                [self.tableView reloadData];
+            } else {
+                //端末情報の取得が失敗した場合の処理
+                self.statusLabel.text = [NSString stringWithFormat:@"取得に失敗しました:%ld",(long)error.code];
+            }
+        }];
+    }
 }
 
 
@@ -110,8 +116,8 @@
     [super viewDidLayoutSubviews];
     
     self.titleLabel.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height / 5.0f);
+    self.statusLabel.frame = CGRectMake(0.0f, self.titleLabel.frame.size.height - self.titleLabel.frame.size.height / 4.0f, self.view.frame.size.width, self.titleLabel.frame.size.height / 4.0f);
     self.tableView.frame = CGRectMake(0.0f, self.titleLabel.frame.size.height, self.view.frame.size.width, self.view.frame.size.height - self.titleLabel.frame.size.height);
-    
 }
 
 #pragma -mark TableViewDataSource
@@ -223,7 +229,7 @@
  */
 - (void)registBtnDidPush:(id)sender {
     
-    // 追加用セル
+    // 追加用セルをinstallationにセットする
     if (self.addFieldManager.keyStr && ![self.addFieldManager.keyStr isEqualToString:@""]) {
         // keyに値が設定されていた場合
         if ([self.addFieldManager.valueStr rangeOfString:@","].location != NSNotFound) {
@@ -234,14 +240,14 @@
         }
     }
     
-    
+    // installationを更新
     [self.installation saveInBackgroundWithBlock:^(NSError *error) {
         if(!error){
-            NSLog(@"保存に成功");
-            // installationの
+            self.statusLabel.text = [NSString stringWithFormat:@"保存に成功しました"];
+            // tableViewの内容を更新
             [self getInstallation];
         } else {
-            NSLog(@"保存に失敗");
+            self.statusLabel.text = [NSString stringWithFormat:@"保存に失敗しました:%ld",(long)error.code];
         }
     }];
 }
@@ -252,6 +258,7 @@
 }
 
 #pragma -mark TextFieldDelegate
+
 // キーボードの「Return」押下時の処理
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     // キーボードを閉じる
@@ -296,23 +303,35 @@
     }
 }
 
-#pragma -mark keyboard
+#pragma -mark keyboardWillShow
 
+/**
+ キーボードが表示されたら呼ばれる
+ */
 - (void)keyboardWillShow:(NSNotification*)notification {
 
     CGRect keyboardRect = [[notification userInfo][UIKeyboardFrameEndUserInfoKey] CGRectValue];
     keyboardRect = [[self.view superview] convertRect:keyboardRect fromView:nil];
     NSNumber *duration = [notification.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
     
-    //アニメーションでtextFieldを動かす
-    [UIView animateWithDuration:[duration doubleValue]
-                     animations:^{
-                         CGRect rect = self.tableView.frame;
-                         rect.origin.y = keyboardRect.origin.y - self.tableView.frame.size.height;
-                         self.tableView.frame = rect;
-                     } ];
+    NSLog(@"%f",self.tableView.contentOffset.y);
+    // textFieldの表示位置取得
+    CGFloat textFieldContentOffset = self.tableView.frame.size.height - self.tableView.contentOffset.y - TABLE_VIEW_CELL_HEIGHT;
+    
+    if (textFieldContentOffset < keyboardRect.size.height) {
+        //アニメーションでtextFieldを動かす
+        [UIView animateWithDuration:[duration doubleValue]
+                         animations:^{
+                             CGRect rect = self.tableView.frame;
+                             rect.origin.y = keyboardRect.origin.y - self.tableView.frame.size.height;
+                             self.tableView.frame = rect;
+                         } ];
+    }
 }
 
+/**
+ キーボードが隠れると呼ばれる
+ */
 - (void)keyboardWillHide:(NSNotification *)notification {
     
     NSNumber *duration = [notification.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
