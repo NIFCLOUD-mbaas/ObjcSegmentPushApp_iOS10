@@ -15,7 +15,7 @@
 
 @property (nonatomic) UITextField *keyField;
 @property (nonatomic) UITextField *valueField;
-@property (nonatomic) UIButton *registBtn;
+@property (nonatomic) UIButton *postBtn;
 
 - (void)setCellWithKey:(NSString *)keyStr value:(id)valueStr;
 - (void)setCellWithKey:(NSString *)keyStr editValue:(id)valueStr;

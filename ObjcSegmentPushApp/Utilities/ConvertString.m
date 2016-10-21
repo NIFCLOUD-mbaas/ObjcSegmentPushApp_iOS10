@@ -31,21 +31,4 @@
     }
 }
 
-/**
- 引数で渡された文字列に「,」が含まれる場合にNSArrayオブジェクトに変換する
- @param str 文字列
- @
- */
-+ (id)convertNSArrayToNSString:(NSString *)str {
-    
-    NSRange range = [str rangeOfString:@","];
-    if (range.location != NSNotFound) {
-        return [str componentsSeparatedByString:@","];
-    }
-    
-    return str;
-}
-
-
-
 @end

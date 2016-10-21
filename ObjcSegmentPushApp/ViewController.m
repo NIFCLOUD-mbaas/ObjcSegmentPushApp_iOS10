@@ -35,6 +35,8 @@
 @property (nonatomic) NSArray *instKeys;
 // installationに初期で登録されているキー
 @property (nonatomic) NSArray *initialInstKeys;
+// tableViewに表示しないinstallationのキー
+@property (nonatomic) NSArray *removeKeys;
 // 追加セルのマネージャー
 @property (nonatomic) AddFieldManager *addFieldManager;
 // textFieldの位置情報
@@ -48,8 +50,13 @@
     
     // installationの初期化
     self.installation = [NCMBInstallation currentInstallation];
-    self.instKeys = [self.installation allKeys];
     self.initialInstKeys = @[@"objectId",@"appVersion",@"badge",@"deviceToken",@"sdkVersion",@"timeZone",@"createDate",@"updateDate",@"deviceType",@"applicationName",@"acl"];
+    self.removeKeys = @[@"acl",@"deviceType",@"applicationName"];
+    NSMutableArray *keyArray = [[self.installation allKeys] mutableCopy];
+    for (NSString *removeKey in self.removeKeys) {
+        [keyArray removeObject:removeKey];
+    }
+    self.instKeys = keyArray;
     // 追加セルのマネージャーの初期化
     self.addFieldManager = [[AddFieldManager alloc]init];
     
@@ -84,34 +91,6 @@
     [self.view addGestureRecognizer:tapGesture];
     
 }
-
-/**
- 最新のinstallationを取得します。
- */
-- (void)getInstallation {
-    
-    self.installation = [NCMBInstallation currentInstallation];
-    
-    // objectIdが取得できている場合はtableViewの表示を更新する
-    if ([self.installation objectForKey:@"objectId"]) {
-        //端末情報をデータストアから取得
-        [self.installation fetchInBackgroundWithBlock:^(NSError *error) {
-            if(!error){
-                //端末情報の取得が成功した場合の処理
-                NSLog(@"取得に成功");
-                self.instKeys = [self.installation allKeys];
-                // 追加fieldの値を初期化する
-                self.addFieldManager.keyStr = @"";
-                self.addFieldManager.valueStr = @"";
-                [self.tableView reloadData];
-            } else {
-                //端末情報の取得が失敗した場合の処理
-                self.statusLabel.text = [NSString stringWithFormat:@"取得に失敗しました:%ld",(long)error.code];
-            }
-        }];
-    }
-}
-
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
@@ -216,16 +195,50 @@
         cell.valueField.delegate = self;
         cell.valueField.tag = indexPath.row;
         cell.valueField.text = self.addFieldManager.valueStr ? self.addFieldManager.valueStr : @"";
-        [cell.registBtn addTarget:self action:@selector(registBtnDidPush:) forControlEvents:UIControlEventTouchUpInside];
+        [cell.postBtn addTarget:self action:@selector(postInstallation:) forControlEvents:UIControlEventTouchUpInside];
     }
 
     return cell;
 }
 
+#pragma -mark requestInstallation
+
+/**
+ 最新のinstallationを取得します。
+ */
+- (void)getInstallation {
+    
+    NCMBInstallation *installation = [NCMBInstallation currentInstallation];
+    
+    // objectIdが取得できている場合はtableViewの表示を更新する
+    if ([installation objectForKey:@"objectId"]) {
+        //端末情報をデータストアから取得
+        [installation fetchInBackgroundWithBlock:^(NSError *error) {
+            if(!error){
+                //端末情報の取得が成功した場合の処理
+                NSLog(@"取得に成功");
+                self.installation = installation;
+                NSMutableArray *keyArray = [[self.installation allKeys] mutableCopy];
+                for (NSString *removeKey in self.removeKeys) {
+                    [keyArray removeObject:removeKey];
+                }
+                self.instKeys = keyArray;
+                // 追加fieldの値を初期化する
+                self.addFieldManager.keyStr = @"";
+                self.addFieldManager.valueStr = @"";
+                [self.tableView reloadData];
+            } else {
+                //端末情報の取得が失敗した場合の処理
+                self.statusLabel.text = [NSString stringWithFormat:@"取得に失敗しました:%ld",(long)error.code];
+            }
+        }];
+    }
+}
+
 /**
  登録ボタンをタップした時に呼ばれます
  */
-- (void)registBtnDidPush:(id)sender {
+- (void)postInstallation:(id)sender {
     
     // 追加用セルをinstallationにセットする
     if (self.addFieldManager.keyStr && ![self.addFieldManager.keyStr isEqualToString:@""]) {

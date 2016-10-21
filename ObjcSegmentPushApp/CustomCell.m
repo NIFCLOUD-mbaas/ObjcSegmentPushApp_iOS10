@@ -96,14 +96,14 @@ const static CGFloat CellMargin = 5.0f;
     self.valueField.font = [UIFont systemFontOfSize:12.0f];
     
     // 更新ボタン
-    self.registBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    self.registBtn.backgroundColor = [UIColor blackColor];
-    [self.registBtn setTitle:@"更新" forState:UIControlStateNormal];
-    [self.registBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    self.postBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    self.postBtn.backgroundColor = [UIColor blackColor];
+    [self.postBtn setTitle:@"更新" forState:UIControlStateNormal];
+    [self.postBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     
     [self addSubview:self.keyField];
     [self addSubview:self.valueField];
-    [self addSubview:self.registBtn];
+    [self addSubview:self.postBtn];
     
     [self setNeedsLayout];
 }
@@ -121,7 +121,7 @@ const static CGFloat CellMargin = 5.0f;
         // 最後のセル
         self.keyField.frame = CGRectMake(0.0f + CellMargin, 0.0f + CellMargin, self.frame.size.width * 0.3f - CellMargin, TABLE_VIEW_CELL_HEIGHT - CellMargin);
         self.valueField.frame = CGRectMake(self.frame.size.width * 0.3f + CellMargin, 0.0f + CellMargin, self.frame.size.width * 0.7f - CellMargin * 2.0f, TABLE_VIEW_CELL_HEIGHT - CellMargin);
-        self.registBtn.frame = CGRectMake(([[UIScreen mainScreen] bounds].size.width - 100) / 2.0f, self.valueField.frame.size.height + 20.0f, 100.0f, 50.0f);
+        self.postBtn.frame = CGRectMake(([[UIScreen mainScreen] bounds].size.width - 100) / 2.0f, self.valueField.frame.size.height + 20.0f, 100.0f, 50.0f);
     }
 }
 
