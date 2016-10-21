@@ -106,18 +106,24 @@ __[【iOS】プッシュ通知の受信に必要な証明書の作り方(開発�
 　
  ![図F3.png](/readme-img/b030.png)
 　
-* プロジェクトをクリックして、「Build Settings」＞「Code Signing」に②開発用証明書(.cer)と⑤プロビジョニングプロファイルを設定します
-　![画像06](/readme-img/006.png)
-　
-* 「Code Signing Identity」に②開発用証明書(.cer)を設定しますが、「Provisioning Profile」に作成した⑤プロビジョニングプロファイルを設定すれば、「Code Signing Identity」の部分は「Automatic」で構いません
- * __注意__：作成した⑤プロビジョニングプロファイルは一度ダブルクリックをしておかないと、「Provisioning Profile」に設定できません
-* Bundle ID を設定します
-* 「General」＞「Identity」の「Bundle Identifier」に③AppID を作成したときに入力したBundle IDに書き換えてください
-　
-![画像i26](/readme-img/i026.png)
+* 「TARGETS」 ＞「General」を開きます
+
+ ![画像14](/readme-img/014.png)
+
+* 「Identity」＞「Bundle Identifier」を入力します
+* 「Bundle Identifier」にはAppID作成時に指定した「Bundle ID」を入力してください
+* 「Signing(Debug)」＞「Provisioning Profile」を設定します
+* 今回使用するプロビジョニングプロファイルをプルダウンから選択します
+* プロビジョニングプロファイルはダウンロードしたものを一度__ダブルクリック__して認識させておく必要があります（プルダウンに表示されない場合はダブルクリックを実施後設定してください）
+* 選択すると以下のようになります
+![画像15](/readme-img/015.png)
+
+* 「TARGETS」＞「Capabilities」を開き、「Push Notifications」を__ON__に設定します
+* 設定すると以下のようになります
+![画像16](/readme-img/016.png)
 　
 * 設定は完了です
-* lightningケーブルで④端末の登録で登録した、動作確認用iPhoneをMacにつなぎます
+* lightningケーブルで登録した動作確認用iPhoneをMacにつなぎます
  * 実機ビルドが初めての場合は[こちら](http://qiita.com/NIFTYCloud-mbaas/items/3f1dd0e7f5471bd4b7d9)をご覧いただき、実機ビルドの準備をお願いします
 * Xcode画面で左上で、接続したiPhoneを選び、実行ボタン（さんかくの再生マーク）をクリックします
 * __ビルド時にエラーが発生した場合の対処方法__
@@ -286,7 +292,7 @@ __[【iOS】プッシュ通知の受信に必要な証明書の作り方(開発�
 
 * `ViewController.m`の`getInstallation`メソッド内でinstallationクラスを生成しています
 *  `allKeys`で、フィールドを全件取得できます
-* `.objectForKey`で、指定したフィールドの中身を取り出すことができます
+*  `objectForKey`で、指定したフィールドの中身を取り出すことができます
 
 ```Objc
 
@@ -299,7 +305,8 @@ __[【iOS】プッシュ通知の受信に必要な証明書の作り方(開発�
 
         } else {
             //端末情報の取得が失敗した場合の処理
-
+            NSLog(@"取得成功:%@",installation);
+            NSString *favorite = [installation objectForKey:@"favorite"];
         }
     }];
 ```
@@ -309,6 +316,10 @@ __[【iOS】プッシュ通知の受信に必要な証明書の作り方(開発�
 * `setObject`で更新内容とフィールド名を指定し、`saveInBackgroundWithBlock`で更新します
 ```Objc
         
+    NCMBInstallation *installation = [NCMBInstallation currentInstallation];
+
+    [installation setObject:更新内容 forKey:フィールド名];
+
     [installation saveInBackgroundWithBlock:^(NSError *error) {
         if(!error){
             //端末情報の更新が成功した場合の処理
