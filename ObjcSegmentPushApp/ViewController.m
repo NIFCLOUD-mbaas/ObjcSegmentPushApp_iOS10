@@ -37,7 +37,8 @@
 @property (nonatomic) NSArray *initialInstKeys;
 // 追加セルのマネージャー
 @property (nonatomic) AddFieldManager *addFieldManager;
-
+// textFieldの位置情報
+@property (nonatomic) CGFloat textFieldPosition;
 @end
 
 @implementation ViewController
@@ -265,6 +266,21 @@
 }
 
 /**
+ textFieldの編集を開始したら呼ばれます
+ */
+-(BOOL)textFieldShouldBeginEditing:(UITextField*)textField {
+    
+    NSIndexPath *indexpath = [NSIndexPath indexPathForRow:textField.tag inSection:0];
+    
+    CGRect rectOfCellInTableView = [self.tableView rectForRowAtIndexPath:indexpath];
+    CGRect rectOfCellInSuperview = [self.tableView convertRect:rectOfCellInTableView toView:[self.tableView superview]];
+    // textFieldの位置情報をセット
+    self.textFieldPosition = rectOfCellInSuperview.origin.y;
+    
+    return YES;
+}
+
+/**
  textFieldの編集が終了したら呼ばれます
  */
 -(void)textFieldDidEndEditing:(UITextField*)textField {
@@ -310,17 +326,16 @@
     CGRect keyboardRect = [[notification userInfo][UIKeyboardFrameEndUserInfoKey] CGRectValue];
     keyboardRect = [[self.view superview] convertRect:keyboardRect fromView:nil];
     NSNumber *duration = [notification.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
+
+    CGFloat keyboardPosition = self.view.frame.size.height - keyboardRect.size.height;
     
-    NSLog(@"%f",self.tableView.contentOffset.y);
-    // textFieldの表示位置取得
-    CGFloat textFieldContentOffset = self.tableView.frame.size.height - self.tableView.contentOffset.y - TABLE_VIEW_CELL_HEIGHT;
-    
-    if (textFieldContentOffset < keyboardRect.size.height) {
+    // 編集するtextFieldの位置がキーボードより下にある場合は、位置を移動する
+    if (self.textFieldPosition + TABLE_VIEW_CELL_HEIGHT > keyboardPosition) {
         //アニメーションでtextFieldを動かす
         [UIView animateWithDuration:[duration doubleValue]
                          animations:^{
                              CGRect rect = self.tableView.frame;
-                             rect.origin.y = keyboardRect.origin.y - self.tableView.frame.size.height;
+                             rect.origin.y = keyboardRect.origin.y - self.textFieldPosition;
                              self.tableView.frame = rect;
                          } ];
     }
