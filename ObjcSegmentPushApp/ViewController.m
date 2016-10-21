@@ -187,29 +187,26 @@
         
         if (![self.initialInstKeys containsObject:keyStr]) {
             // 既存フィールド以外とchannelsはvalueを編集できるようにする
-            NSString *cellIdentifier = @"editCell";
-            cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+            cell = [tableView dequeueReusableCellWithIdentifier:EDIT_CELL_IDENTIFIER];
             if (!cell){
-                cell = [[CustomCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+                cell = [[CustomCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:EDIT_CELL_IDENTIFIER];
             }
             [cell setCellWithKey:keyStr editValue:valueStr];
             cell.valueField.delegate = self;
             cell.valueField.tag = indexPath.row;
         } else {
             // 編集なしのセル (表示のみ)
-            NSString *cellIdentifier = @"nomalCell";
-            cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+            cell = [tableView dequeueReusableCellWithIdentifier:NOMAL_CELL_IDENTIFIER];
             if (!cell){
-                cell = [[CustomCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+                cell = [[CustomCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:NOMAL_CELL_IDENTIFIER];
             }
             [cell setCellWithKey:keyStr value:valueStr];
         }
     } else {
         // 最後のセルは追加用セルと登録ボタンを表示
-        NSString *cellIdentifier = @"AddCell";
-        cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        cell = [tableView dequeueReusableCellWithIdentifier:ADD_CELL_IDENTIFIER];
         if (!cell){
-            cell = [[CustomCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+            cell = [[CustomCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ADD_CELL_IDENTIFIER];
         }
         [cell setAddRecordCell];
         cell.keyField.delegate = self;

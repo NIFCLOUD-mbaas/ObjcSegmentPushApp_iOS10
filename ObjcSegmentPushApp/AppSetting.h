@@ -20,4 +20,9 @@
 // TableViewのボタン表示用のセルの高さ
 #define TABLE_VIEW_POST_BTN_CELL_HEIGHT 130.0f
 
+// cellIdentifier
+#define NOMAL_CELL_IDENTIFIER @"nomalCell"
+#define EDIT_CELL_IDENTIFIER @"editCell"
+#define ADD_CELL_IDENTIFIER @"addCell"
+
 #endif /* AppSetting_h */
