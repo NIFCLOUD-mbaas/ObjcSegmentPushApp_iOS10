@@ -80,7 +80,7 @@
         [viewController getInstallation];
         if(!error){
             // 端末情報の登録が成功した場合の処理
-            NSLog(@"登録に成功");
+            viewController.statusLabel.text = [NSString stringWithFormat:@"登録に成功しました"];
         } else {
             // 端末情報の登録が失敗した場合の処理
             viewController.statusLabel.text = [NSString stringWithFormat:@"登録に失敗しました:%ld",(long)error.code];

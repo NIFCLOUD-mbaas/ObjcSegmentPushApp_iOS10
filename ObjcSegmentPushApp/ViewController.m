@@ -66,6 +66,7 @@
     self.titleLabel.textAlignment = NSTextAlignmentCenter;
     self.titleLabel.font = [UIFont systemFontOfSize:28.0f];
     
+    // 通信結果を表示するラベル
     self.statusLabel = [[UILabel alloc]init];
     self.statusLabel.textAlignment = NSTextAlignmentCenter;
     self.statusLabel.font = [UIFont systemFontOfSize:12.0f];
@@ -280,6 +281,7 @@
 
 /**
  textFieldの編集を開始したら呼ばれます
+ textFieldの位置情報をセットします
  */
 -(BOOL)textFieldShouldBeginEditing:(UITextField*)textField {
     
@@ -306,7 +308,11 @@
             if ([textField.text rangeOfString:@","].location != NSNotFound) {
                 // value文字列に[,]がある場合は配列に変換してinstallationにセットする
                 [self.installation setObject:[textField.text componentsSeparatedByString:@","] forKey:self.instKeys[textField.tag]];
+            } else if ([self.instKeys[textField.tag]isEqualToString:@"channels"]) {
+                // channelsは[,]がなくても配列に変換
+                [self.installation setObject:@[textField.text] forKey:self.instKeys[textField.tag]];
             } else {
+                // それ以外は文字列としてinstallationにセットする
                 [self.installation setObject:textField.text forKey:self.instKeys[textField.tag]];
             }
         }
