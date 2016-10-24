@@ -159,7 +159,6 @@
 				TargetAttributes = {
 					9D7638501DB4BEE4003BB554 = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = 796KW2587D;
 						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.Push = {
@@ -377,14 +376,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = ObjcSegmentPushApp/ObjcSegmentPushApp.entitlements;
-				DEVELOPMENT_TEAM = 796KW2587D;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = ObjcSegmentPushApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = test.DataStoreSample;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mobilebackend.niftycloud.ObjcSegmentPushApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "d06bf96e-053c-4dee-b823-dd7a9dcb4516";
-				PROVISIONING_PROFILE_SPECIFIER = DataStoreSample_dev;
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Debug;
 		};
@@ -398,7 +397,7 @@
 				INFOPLIST_FILE = ObjcSegmentPushApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = test.DataStoreSample;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mobilebackend.niftycloud.ObjcSegmentPushApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 			};
