@@ -33,14 +33,18 @@ const static CGFloat CellMargin = 5.0f;
     self.keyLabel.textColor = [UIColor whiteColor];
     self.keyLabel.textAlignment = NSTextAlignmentCenter;
     self.keyLabel.font = [UIFont systemFontOfSize:12.0f];
+    self.keyLabel.numberOfLines = 0;
     
     self.valueLabel = [[UILabel alloc]init];
     self.valueLabel.backgroundColor = [UIColor blackColor];
     if (valueStr) {
         self.valueLabel.text = [ConvertString convertNSStringToAnyObject:valueStr];
         self.valueLabel.textColor = [UIColor whiteColor];
-        self.valueLabel.textAlignment = NSTextAlignmentCenter;
+        if ([self.reuseIdentifier isEqualToString:NOMAL_CELL_IDENTIFIER]) {
+            self.valueLabel.textAlignment = NSTextAlignmentCenter;
+        }
         self.valueLabel.font = [UIFont systemFontOfSize:12.0f];
+        self.valueLabel.numberOfLines = 0;
     }
     
     [self addSubview:self.keyLabel];
@@ -62,6 +66,7 @@ const static CGFloat CellMargin = 5.0f;
     self.keyLabel.textColor = [UIColor whiteColor];
     self.keyLabel.textAlignment = NSTextAlignmentCenter;
     self.keyLabel.font = [UIFont systemFontOfSize:12.0f];
+    self.keyLabel.numberOfLines = 0;
     
     self.valueField = [[UITextField alloc]init];
     self.valueField.borderStyle = UITextBorderStyleRoundedRect;
@@ -109,8 +114,8 @@ const static CGFloat CellMargin = 5.0f;
 }
 
 - (void)layoutSubviews {
-    if ([self.reuseIdentifier isEqualToString:NOMAL_CELL_IDENTIFIER]) {
-        // ノーマルセル
+    if ([self.reuseIdentifier isEqualToString:NOMAL_CELL_IDENTIFIER] || [self.reuseIdentifier isEqualToString:TOKEN_CELL_IDENTIFIER]) {
+        // ノーマルセルとdeviceTokenセル
         self.keyLabel.frame = CGRectMake(0.0f + CellMargin, 0.0f + CellMargin, self.frame.size.width * 0.3f - CellMargin, self.frame.size.height - CellMargin);
         self.valueLabel.frame = CGRectMake(self.frame.size.width * 0.3f + CellMargin, 0.0f + CellMargin, self.frame.size.width * 0.7f - CellMargin * 2.0f, self.frame.size.height - CellMargin);
     } else if ([self.reuseIdentifier isEqualToString:EDIT_CELL_IDENTIFIER]) {

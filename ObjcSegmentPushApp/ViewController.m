@@ -149,6 +149,8 @@
     
     if (indexPath.row == self.instKeys.count) {
         return TABLE_VIEW_POST_BTN_CELL_HEIGHT;
+    } else if ([self.instKeys[indexPath.row]isEqualToString:@"deviceToken"]) {
+        return DEVICE_TOKEN_CELL_HEIGHT;
     }
     
     return TABLE_VIEW_CELL_HEIGHT;
@@ -177,9 +179,18 @@
             cell.valueField.tag = indexPath.row;
         } else {
             // 編集なしのセル (表示のみ)
-            cell = [tableView dequeueReusableCellWithIdentifier:NOMAL_CELL_IDENTIFIER];
-            if (!cell){
-                cell = [[CustomCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:NOMAL_CELL_IDENTIFIER];
+            if ([keyStr isEqualToString:@"deviceToken"]) {
+                // deviceTokenセルはセルの高さを変更して全体を表示させる
+                cell = [tableView dequeueReusableCellWithIdentifier:TOKEN_CELL_IDENTIFIER];
+                if (!cell){
+                    cell = [[CustomCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:TOKEN_CELL_IDENTIFIER];
+                }
+            } else {
+                // deviceTokenセル以外
+                cell = [tableView dequeueReusableCellWithIdentifier:NOMAL_CELL_IDENTIFIER];
+                if (!cell){
+                    cell = [[CustomCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:NOMAL_CELL_IDENTIFIER];
+                }
             }
             [cell setCellWithKey:keyStr value:valueStr];
         }
