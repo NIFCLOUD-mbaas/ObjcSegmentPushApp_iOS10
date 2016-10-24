@@ -149,6 +149,8 @@
     
     if (indexPath.row == self.instKeys.count) {
         return TABLE_VIEW_POST_BTN_CELL_HEIGHT;
+    } else if ([self.instKeys[indexPath.row]isEqualToString:@"deviceToken"]) {
+        return DEVICE_TOKEN_CELL_HEIGHT;
     }
     
     return TABLE_VIEW_CELL_HEIGHT;
@@ -158,7 +160,7 @@
  TableViewのCellを返します。
  */
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-
+    
     CustomCell *cell;
     
     if (indexPath.row < self.instKeys.count) {
@@ -177,9 +179,18 @@
             cell.valueField.tag = indexPath.row;
         } else {
             // 編集なしのセル (表示のみ)
-            cell = [tableView dequeueReusableCellWithIdentifier:NOMAL_CELL_IDENTIFIER];
-            if (!cell){
-                cell = [[CustomCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:NOMAL_CELL_IDENTIFIER];
+            if ([keyStr isEqualToString:@"deviceToken"]) {
+                // deviceTokenセルはセルの高さを変更して全体を表示させる
+                cell = [tableView dequeueReusableCellWithIdentifier:TOKEN_CELL_IDENTIFIER];
+                if (!cell){
+                    cell = [[CustomCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:TOKEN_CELL_IDENTIFIER];
+                }
+            } else {
+                // deviceTokenセル以外
+                cell = [tableView dequeueReusableCellWithIdentifier:NOMAL_CELL_IDENTIFIER];
+                if (!cell){
+                    cell = [[CustomCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:NOMAL_CELL_IDENTIFIER];
+                }
             }
             [cell setCellWithKey:keyStr value:valueStr];
         }
@@ -198,7 +209,7 @@
         cell.valueField.text = self.addFieldManager.valueStr ? self.addFieldManager.valueStr : @"";
         [cell.postBtn addTarget:self action:@selector(postInstallation:) forControlEvents:UIControlEventTouchUpInside];
     }
-
+    
     return cell;
 }
 
@@ -341,11 +352,11 @@
  キーボードが表示されたら呼ばれる
  */
 - (void)keyboardWillShow:(NSNotification*)notification {
-
+    
     CGRect keyboardRect = [[notification userInfo][UIKeyboardFrameEndUserInfoKey] CGRectValue];
     keyboardRect = [[self.view superview] convertRect:keyboardRect fromView:nil];
     NSNumber *duration = [notification.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
-
+    
     CGFloat keyboardPosition = self.view.frame.size.height - keyboardRect.size.height;
     
     // 編集するtextFieldの位置がキーボードより下にある場合は、位置を移動する
