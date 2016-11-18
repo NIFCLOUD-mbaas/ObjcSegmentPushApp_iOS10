@@ -277,6 +277,8 @@
             [self getInstallation];
         } else {
             self.statusLabel.text = [NSString stringWithFormat:@"更新に失敗しました:%ld",(long)error.code];
+            // 保存に失敗した場合は、installationから削除する
+            [self.installation removeObjectForKey:self.addFieldManager.keyStr];
         }
     }];
 }
