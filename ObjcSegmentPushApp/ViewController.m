@@ -252,6 +252,9 @@
  */
 - (void)postInstallation:(id)sender {
     
+    // textFieldの編集を終了する
+    [self.view endEditing: YES];
+    
     // 追加フィールドにvalueだけセットされてkeyには何もセットされていない場合
     if (![self.addFieldManager.valueStr isEqualToString:@""] && [self.addFieldManager.keyStr isEqualToString:@""]) {
         self.statusLabel.text = @"key,valueをセットで入力してください";
