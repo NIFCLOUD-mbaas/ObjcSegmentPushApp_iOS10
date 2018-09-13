@@ -132,12 +132,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9D7638681DB4BEE4003BB554 /* Build configuration list for PBXNativeTarget "ObjcSegmentPushApp" */;
 			buildPhases = (
+				AD3A890BB041DCA2C4AD5051 /* [CP] Check Pods Manifest.lock */,
 				F92C3891A6D7693EF4E72D98 /* 📦 Check Pods Manifest.lock */,
 				9D76384D1DB4BEE4003BB554 /* Sources */,
 				9D76384E1DB4BEE4003BB554 /* Frameworks */,
 				9D76384F1DB4BEE4003BB554 /* Resources */,
-				2E50625BA32243D7389BB3CF /* 📦 Embed Pods Frameworks */,
-				508A47F14BD14B0C2FF79E4B /* 📦 Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -155,7 +154,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0800;
-				ORGANIZATIONNAME = Nifty;
+				ORGANIZATIONNAME = NifCloud;
 				TargetAttributes = {
 					9D7638501DB4BEE4003BB554 = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -200,34 +199,22 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		2E50625BA32243D7389BB3CF /* 📦 Embed Pods Frameworks */ = {
+		AD3A890BB041DCA2C4AD5051 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
-			name = "📦 Embed Pods Frameworks";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ObjcSegmentPushApp-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ObjcSegmentPushApp/Pods-ObjcSegmentPushApp-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		508A47F14BD14B0C2FF79E4B /* 📦 Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "📦 Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ObjcSegmentPushApp/Pods-ObjcSegmentPushApp-resources.sh\"\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		F92C3891A6D7693EF4E72D98 /* 📦 Check Pods Manifest.lock */ = {
