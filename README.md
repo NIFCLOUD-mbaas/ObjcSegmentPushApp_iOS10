@@ -3,46 +3,47 @@
 ![画像1](/readme-img/001.png)
 
 ## 概要
-* [ニフティクラウド mobile backend](http://mb.cloud.nifty.com/)の『プッシュ通知』機能を利用したサンプルプロジェクトです！
+* [ニフクラ  mobile backend](https://mbaas.nifcloud.com/)の『プッシュ通知』機能を利用したサンプルプロジェクトです！
 * 全配信だけでなく、ユーザー(端末)のグループで絞り込んでプッシュ通知を送れます。たとえば、appleとorangeとbananaという重複可能なグループがあったときに、appleに属しているユーザー(端末)にだけプッシュ通知を送ることが出来ます。
-* 簡単な操作ですぐに [ニフティクラウド mobile backend](http://mb.cloud.nifty.com/)の機能を体験いただけます！！
+* 簡単な操作ですぐに [ニフクラ  mobile backend](https://mbaas.nifcloud.com/)の機能を体験いただけます！！
 
 ## 目次
-* [ニフティクラウド mobile backendって何？？](#ニフティクラウド mobile backendって何？？)
+* [ニフクラ  mobile backendって何？？](#ニフクラ  mobile backendって何？？)
 * [プッシュ通知の仕組み](#プッシュ通知の仕組み)
 * [作業の手順](#作業の手順)
 * [コードの解説](#解説)
 
-## ニフティクラウド mobile backendって何？？
+## ニフクラ  mobile backendって何？？
 スマートフォンアプリのバックエンド機能（プッシュ通知・データストア・会員管理・ファイルストア・SNS連携・位置情報検索・スクリプト）が**開発不要**、しかも基本**無料**(注1)で使えるクラウドサービス！
 
-注1：詳しくは[こちら](http://mb.cloud.nifty.com/price.htm)をご覧ください
+注1：詳しくは[こちら](https://mbaas.nifcloud.com/price.htm)をご覧ください
 
 ![画像2](/readme-img/002.png)
 
 ## 動作環境
-* Mac OS Mojave
-* Xcode ver. 11.0 
-* iPhone6s(iOS 13.1)
+* Mac OS 10.15(Catalina)
+* Xcode ver. 12.0
+* Simulator ver.12.0
+* iPhone11 (iOS14.0)
  * このサンプルアプリは、実機ビルドが必要です
 
 ※上記内容で動作確認をしています
 
 
 ## プッシュ通知の仕組み
-* ニフティクラウド mobile backendのプッシュ通知は、iOSが提供している通知サービスを利用しています
+* ニフクラ  mobile backendのプッシュ通知は、iOSが提供している通知サービスを利用しています
  * iOSの通知サービス　__APNs（Apple Push Notification Service）__
 
  ![画像1](/readme-img/010.png)
 
-* 上図のように、アプリ（Xcode）・サーバー（ニフティクラウド mobile backend）・通知サービス（APNs）の間でやり取りを行うため、認証が必要になります
+* 上図のように、アプリ（Xcode）・サーバー（ニフクラ  mobile backend）・通知サービス（APNs）の間でやり取りを行うため、認証が必要になります
  * 認証に必要な鍵や証明書の作成は作業手順の「0.プッシュ通知機能使うための準備」で行います
 
 ## 作業の手順
 * これから、次のような流れで作業を行います（少し長いので休憩しつつ行うことをオススメします）
 
 0. [プッシュ通知機能を使うための準備](#1プッシュ通知機能を使うための準備)
-1. [ニフティクラウド mobile backendの会員登録とログイン→アプリ作成と設定](#2-ニフティクラウド-mobile-backendの会員登録とログインアプリ作成と設定)
+1. [ニフクラ  mobile backendの会員登録とログイン→アプリ作成と設定](#2-ニフクラ -mobile-backendの会員登録とログインアプリ作成と設定)
 2. [GitHubからサンプルプロジェクトのダウンロード](#3-githubからサンプルプロジェクトのダウンロード)
 3. [Xcodeでアプリを起動](#4-xcodeでアプリを起動)
 4. [実機ビルド](#5-実機ビルド)
@@ -51,20 +52,20 @@
 
 
 ### 1.プッシュ通知機能を使うための準備
-__[【iOS】プッシュ通知の受信に必要な証明書の作り方(開発用)](https://github.com/NIFTYCloud-mbaas/iOS_Certificate)__
+__[【iOS】プッシュ通知の受信に必要な証明書の作り方(開発用)](https://github.com/NIFCloud-mbaas/iOS_Certificate)__
 * 上記のドキュメントをご覧の上、必要な証明書類の作成をお願いします
  * 証明書の作成には[Apple Developer Program](https://developer.apple.com/account/)の登録（有料）が必要です
 
 ![画像i002](/readme-img/i002.png)
 
 
-### 2. [ニフティクラウド mobile backend](http://mb.cloud.nifty.com/)の会員登録とログイン→アプリ作成と設定
+### 2. [ニフクラ  mobile backend](https://mbaas.nifcloud.com/)の会員登録とログイン→アプリ作成と設定
 * 上記リンクから会員登録（無料）をします。登録ができたらログインをすると下図のように「アプリの新規作成」画面が出るのでアプリを作成します
 　
 ![画像3](/readme-img/003.png)
 　
 * アプリ作成されると下図のような画面になります
-* この２種類のAPIキー（アプリケーションキーとクライアントキー）はXcodeで作成するiOSアプリに[ニフティクラウド mobile backend](http://mb.cloud.nifty.com/)を紐付けるために使用します
+* この２種類のAPIキー（アプリケーションキーとクライアントキー）はXcodeで作成するiOSアプリに[ニフクラ  mobile backend](https://mbaas.nifcloud.com/)を紐付けるために使用します
 　
 ![画像4](/readme-img/004.png)
 　
@@ -75,11 +76,11 @@ __[【iOS】プッシュ通知の受信に必要な証明書の作り方(開発�
 　
 　
 
-### 3. [GitHub](https://github.com/NIFTYCloud-mbaas/ObjcSegmentPushApp_iOS)からサンプルプロジェクトのダウンロード
+### 3. [GitHub](https://github.com/NIFCloud-mbaas/ObjcSegmentPushApp_iOS)からサンプルプロジェクトのダウンロード
 　
 * 下記リンクをクリックしてプロジェクトをダウンロードをMacにダウンロードします
 
- * __[ObjcSegmentPushApp_iOS](https://github.com/NIFTYCloud-mbaas/ObjcSegmentPushApp_iOS/archive/master.zip)__
+ * __[ObjcSegmentPushApp_iOS](https://github.com/NIFCloud-mbaas/ObjcSegmentPushApp_iOS/archive/master.zip)__
 
 
 ### 4. Xcodeでアプリを起動
@@ -92,8 +93,18 @@ __[【iOS】プッシュ通知の受信に必要な証明書の作り方(開発�
 
 ![画像08](/readme-img/008.png)
 
+### 5. APIキーの設定
 
-### 5. 実機ビルド
+* `AppDelegate.m`を編集します
+* 先程[ニフクラ mobile backend](https://mbaas.nifcloud.com/)のダッシュボード上で確認したAPIキーを貼り付けます
+
+![画像07](/readme-img/007.png)
+
+* それぞれ`YOUR_NCMB_APPLICATION_KEY`と`YOUR_NCMB_CLIENT_KEY`の部分を書き換えます
+ * このとき、ダブルクォーテーション（`"`）を消さないように注意してください！
+* 書き換え終わったら`command + s`キーで保存をします
+
+### 6. 実機ビルド
 * 始めて実機ビルドをする場合は、Xcodeにアカウント（AppleID）の登録をします
  * メニューバーの「Xcode」＞「Preferences...」を選択します
  * Accounts画面が開いたら、左下の「＋」をクリックします
@@ -124,7 +135,7 @@ __[【iOS】プッシュ通知の受信に必要な証明書の作り方(開発�
 　
 * 設定は完了です
 * lightningケーブルで登録した動作確認用iPhoneをMacにつなぎます
- * 実機ビルドが初めての場合は[こちら](http://qiita.com/NIFTYCloud-mbaas/items/3f1dd0e7f5471bd4b7d9)をご覧いただき、実機ビルドの準備をお願いします
+ * 実機ビルドが初めての場合は[こちら](http://qiita.com/NIFCloud-mbaas/items/3f1dd0e7f5471bd4b7d9)をご覧いただき、実機ビルドの準備をお願いします
 * Xcode画面で左上で、接続したiPhoneを選び、実行ボタン（さんかくの再生マーク）をクリックします
 * __ビルド時にエラーが発生した場合の対処方法__
  * Xcodeのバージョンが古い場合`#import <NCMB/NCMB.h>`にエラーが発生し、上手くSDKが読み込めないことがあります
@@ -132,10 +143,10 @@ __[【iOS】プッシュ通知の受信に必要な証明書の作り方(開発�
 
 ### 6.動作確認
 * インストールしたアプリを起動します
- * **注意！！！**プッシュ通知の許可を求めるアラートが出たら、**必ず許可してください！**
+ * **注意！！！** プッシュ通知の許可を求めるアラートが出たら、**必ず許可してください！**
 * 起動されたらこの時点でデバイストークンが取得されます
- * **注意！**デバイストークンが取得されて画面に表示されるまでに少しの時間がかかります
-* [ニフティクラウド mobile backend](http://mb.cloud.nifty.com/)のダッシュボードで「データストア」＞「installation」クラスを確認してみましょう！
+ * **注意！** デバイストークンが取得されて画面に表示されるまでに少しの時間がかかります
+* [ニフクラ  mobile backend](https://mbaas.nifcloud.com/)のダッシュボードで「データストア」＞「installation」クラスを確認してみましょう！
 　
 ![画像12](/readme-img/012.png)
 
@@ -145,7 +156,7 @@ __[【iOS】プッシュ通知の受信に必要な証明書の作り方(開発�
 
 #### まずは全配信のプッシュ通知を送る
 
-* [ニフティクラウド mobile backend](http://mb.cloud.nifty.com/)のダッシュボードで「プッシュ通知」＞「＋新しいプッシュ通知」をクリックします
+* [ニフクラ  mobile backend](https://mbaas.nifcloud.com/)のダッシュボードで「プッシュ通知」＞「＋新しいプッシュ通知」をクリックします
 * プッシュ通知のフォームが開かれます
 * 必要な項目を入力して「プッシュ通知を作成する」をクリックします
 
@@ -167,7 +178,7 @@ __[【iOS】プッシュ通知の受信に必要な証明書の作り方(開発�
  * channelsは`,`で区切ることで、配列の要素として処理することができます
 * 同時に新しいフィールドの追加もしてみましょう。"favorite"というフィールドを作り、中身には"music"と入れてみました。こうすることで、ユーザーに新しい属性を付与することができるようになります！
 
-* 編集が完了したら送信ボタンをタップして下さい
+* 編集が完了したら更新ボタンをタップして下さい
 
 ![画像cap2](/readme-img/cap02.png)
 
@@ -212,7 +223,7 @@ __[【iOS】プッシュ通知の受信に必要な証明書の作り方(開発�
 サンプルプロジェクトに実装済みの内容のご紹介
 
 #### SDKのインポートと初期設定
-* ニフティクラウド mobile backend の[ドキュメント（クイックスタート）](http://mb.cloud.nifty.com/doc/current/introduction/quickstart_ios.html)をObjective-C版に書き換えたドキュメントをご用意していますので、ご活用ください
+* ニフクラ  mobile backend の[ドキュメント（クイックスタート）](https://mbaas.nifcloud.com/doc/current/introduction/quickstart_ios.html)をObjective-C版に書き換えたドキュメントをご用意していますので、ご活用ください
 
 #### deviceToken取得ロジック
  * `AppDelegate.m`の`didFinishLaunchingWithOptions`メソッドにAPNsに対してデバイストークンの要求するコードを記述し、デバイストークンが取得された後に呼び出される`didRegisterForRemoteNotificationsWithDeviceToken`メソッドを追記をします
@@ -336,4 +347,4 @@ __[【iOS】プッシュ通知の受信に必要な証明書の作り方(開発�
 
 ## 参考
 * 同じ内容の【Swift】版もご用意しています
- * [Swift版](https://github.com/NIFTYCloud-mbaas/SwiftSegmentPushApp)
+ * [Swift版](https://github.com/NIFCloud-mbaas/SwiftSegmentPushApp)
