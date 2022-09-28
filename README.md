@@ -21,10 +21,9 @@
 ![画像2](/readme-img/002.png)
 
 ## 動作環境
-* Mac OS 10.15(Catalina)
-* Xcode ver. 12.0
-* Simulator ver.12.0
-* iPhone11 (iOS14.0)
+* Mac OS 12.5.1 (Monterey)
+* Xcode Version 14.0
+* iPhone X (iOS 16)
  * このサンプルアプリは、実機ビルドが必要です
 
 ※上記内容で動作確認をしています
